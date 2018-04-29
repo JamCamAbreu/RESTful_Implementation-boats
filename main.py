@@ -64,7 +64,7 @@ class BoatHandler(webapp2.RequestHandler):
         # convert to dictionary:
         boat_dict = new_boat.to_dict()
         boat_dict['self'] = '/boat/' + new_boat.key.urlsafe()
-        self.response.write("Here's the boat: " + json.dumps(boat_dict))
+        self.response.write(json.dumps(boat_dict))
 
 
     # GET an existing BOAT
@@ -103,14 +103,14 @@ class BoatHandler(webapp2.RequestHandler):
 
             if b is None:
                 self.response.set_status(404)
-                self.response.write("Boat with given id could not be found")
+                self.response.write("NOT FOUND: Boat with given id could not be found.")
 
             else:
                 # Boat at sea. Just delete boat:
                 if (b.at_sea == True):
                     b.key.delete()
                     self.response.set_status(200)
-                    self.response.write("Boat with given id was removed successfully")
+                    self.response.write("Boat with given id was removed successfully.")
 
                 # boat is docked. Remove reference to boat first:
                 else:
@@ -128,12 +128,12 @@ class BoatHandler(webapp2.RequestHandler):
                     # finally delete boat:
                     b.key.delete()
                     self.response.set_status(200)
-                    self.response.write("Boat with given id was removed successfully")
+                    self.response.write("Boat with given id was removed successfully.")
 
         # no id supplied
         else:
             self.response.set_status(404)
-            self.response.write("You must supply an id for the boat to be removed")
+            self.response.write("NOT FOUND: You must supply an id for the boat to be removed.")
 
 
     # Modify a boat
@@ -183,15 +183,24 @@ class BoatHandler(webapp2.RequestHandler):
                     # put boat out to sea:
                     b.at_sea = True
                     b.put()
+
+                    # return the boat in response:
+                    b_d = b.to_dict()
+                    b_d['self'] = "/boat/" + b.id
                     self.response.set_status(200)
-                    self.response.write("Boat successfully undocked!")
+                    self.response.headers["Content-Type"] = "application/json"
+                    self.response.write(json.dumps(b_d))
 
                 # DOCK the boat:
                 else:
 
+                    # boat was already docked (do nothing):
                     if not b.at_sea:
+                        b_d = b.to_dict()
+                        b_d['self'] = "/boat/" + b.id
                         self.response.set_status(200)
-                        self.response.write("Boat was already docked")
+                        self.response.headers["Content-Type"] = "application/json"
+                        self.response.write(json.dumps(b_d))
 
                     else:
                         # check for provided slip number:
@@ -229,20 +238,25 @@ class BoatHandler(webapp2.RequestHandler):
 
                         if foundSlip == False:
                             self.response.set_status(403)
-                            self.response.write("There was no slip available for dock!")
+                            self.response.write("FORBIDDEN: There are no slips available for docking.")
+
                         else:
+                            b_d = b.to_dict()
+                            b_d['self'] = "/boat/" + b.id
                             self.response.set_status(200)
-                            self.response.write("boat was docked successfully at slip number: " + str(slipNum))
+                            self.response.headers["Content-Type"] = "application/json"
+                            self.response.write(json.dumps(b_d))
+
 
             # boat with given id does not exist:
             else:
                 self.response.set_status(404)
-                self.response.write("The provided boat id could not be found")
+                self.response.write("NOT FOUND: The provided boat id could not be found.")
 
         # no id provided in URL:
         else:
-            self.response.set_status(404)
-            self.response.write("You must provide a boat with an id")
+            self.response.set_status(403)
+            self.response.write("FORBIDDEN: You must provide a boat with an id.")
 
 
 
@@ -296,9 +310,9 @@ class SlipHandler(webapp2.RequestHandler):
 
         # convert to dictionary:
         slip_dict = new_slip.to_dict()
-        slip_dict['self'] = '/slip/' + new_slip.key.urlsafe()
+        slip_dict['self'] = '/slip/' + new_slip.id
         self.response.headers["Content-Type"] = "application/json"
-        self.response.write("Here's the slip: " + json.dumps(slip_dict))
+        self.response.write(json.dumps(slip_dict))
 
 
     # GET an existing SLIP
@@ -318,7 +332,7 @@ class SlipHandler(webapp2.RequestHandler):
 
             else:
                 self.response.set_status(404)
-                self.response.write("The slip with the given id could not be found")
+                self.response.write("NOT FOUND: The slip with the given id could not be found")
 
         # display ALL slips:
         else:
@@ -347,7 +361,7 @@ class SlipHandler(webapp2.RequestHandler):
 
             if s is None:
                 self.response.set_status(404)
-                self.response.write("Slip with given id could not be found")
+                self.response.write("NOT FOUND: Slip with given id could not be found.")
 
             else:
                 # remove boat from slip it's docked at
@@ -358,39 +372,16 @@ class SlipHandler(webapp2.RequestHandler):
                     b.at_sea = True
                     b.put()
 
-                    s.key.delete()
-                    self.response.set_status(200)
-                    self.response.write("Slip with given id was removed successfully")
-
-                else:
-                    self.response.write("No boat attached!")
+                # Finally: delete the slip:
+                s.key.delete()
+                self.response.set_status(200)
+                self.response.write("Slip with given id was removed successfully.")
 
 
         # no id supplied
         else:
             self.response.set_status(404)
-            self.response.write("You must supply an id for the slip to be removed")
-
-
-    # Modify a slip
-    def patch(self, id=None):
-        if id:
-                # look up slip with given id
-                s = Slip.get_by_id(int(id))
-
-                # TODO don't actually do this, debug
-                newNumber = s.number + 10
-                s.number = newNumber
-                s.put()
-
-                self.response.set_status(200)
-                self.response.write("I've updated your slip!")
-
-        else:
-            self.response.set_status(404)
-            self.response.write("You must provide a slip with an id")
-
-
+            self.response.write("NOT FOUND: You must supply an id for the slip to be removed.")
 
 
 
@@ -414,15 +405,14 @@ class MainPage(webapp2.RequestHandler):
                             + 'GET      "/slip"             - view all slips\n'
                             + 'GET      "/slip/:slip_id"    - view a specific slip\n'
                             + '\n'
-                            + 'POST     "/boat/"            - Create a new boat with given name, type, and length (all required)\n'
-                            + 'POST     "/slip/"            - Create a new slip\n'
+                            + 'POST     "/boat"            - Create a new boat with given name, type, and length (all required)\n'
+                            + 'POST     "/slip"            - Create a new slip\n'
+                            + '\n'
                             + 'DELETE   "/boat/:boat_id"    - delete a specific boat\n'
                             + 'DELETE   "/slip/:slip_id"    - delete a specific slip\n'
+                            + '\n'
                             + 'PATCH    "/boat/:boat_id"    - dock/undock a specific boat (docking done manually or automatically)\n'
                         )
-
-
-
 
 
 
