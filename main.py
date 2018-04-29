@@ -86,7 +86,7 @@ class BoatHandler(webapp2.RequestHandler):
             # put all slips in a list for nice printing:
             boat_list = []
             for boat in allBoats:
-                boatID = boat.id
+                boatID = str(boat.id)
                 boat = boat.to_dict()
                 boat['self'] = "/boat/" + boatID
                 boat_list.append(boat)
@@ -186,7 +186,8 @@ class BoatHandler(webapp2.RequestHandler):
 
                     # return the boat in response:
                     b_d = b.to_dict()
-                    b_d['self'] = "/boat/" + b.id
+                    BID = str(b.id)
+                    b_d['self'] = "/boat/" + BID
                     self.response.set_status(200)
                     self.response.headers["Content-Type"] = "application/json"
                     self.response.write(json.dumps(b_d))
@@ -197,7 +198,8 @@ class BoatHandler(webapp2.RequestHandler):
                     # boat was already docked (do nothing):
                     if not b.at_sea:
                         b_d = b.to_dict()
-                        b_d['self'] = "/boat/" + b.id
+                        BID = str(b.id)
+                        b_d['self'] = "/boat/" + BID
                         self.response.set_status(200)
                         self.response.headers["Content-Type"] = "application/json"
                         self.response.write(json.dumps(b_d))
@@ -242,7 +244,8 @@ class BoatHandler(webapp2.RequestHandler):
 
                         else:
                             b_d = b.to_dict()
-                            b_d['self'] = "/boat/" + b.id
+                            BID = str(b.id)
+                            b_d['self'] = "/boat/" + BID
                             self.response.set_status(200)
                             self.response.headers["Content-Type"] = "application/json"
                             self.response.write(json.dumps(b_d))
@@ -343,7 +346,7 @@ class SlipHandler(webapp2.RequestHandler):
             # put all slips in a list for nice printing:
             slip_list = []
             for slip in allSlips:
-                slipID = slip.id
+                slipID = str(slip.id)
                 slip_d = slip.to_dict()
                 slip_d['self'] = "/slip/" + slipID
                 if (slip.current_boat != None):
