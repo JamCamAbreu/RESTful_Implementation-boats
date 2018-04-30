@@ -1,0 +1,857 @@
+{
+	"info": {
+		"_postman_id": "00cdce25-e626-4b2a-a16e-3d8e06a05be7",
+		"name": "week03-BoatsSlips-Google",
+		"description": "NOTE! Make sure to set delay to at least 450 ms!!",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test 1a. Create Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "22859bf5-94c1-447f-9956-8fa218863a43",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log(jsonData);",
+							"",
+							"tests[\"Test 1a return status\"] = (pm.response.code == 200)",
+							"",
+							"var boatName = jsonData.name;",
+							"tests[\"boatName\"] = (boatName == \"Dagwood\");",
+							"",
+							"var boatType = jsonData.type;",
+							"tests[\"boatType\"] = (boatType == \"Viking Ship\");",
+							"",
+							"var boatLength = jsonData.length;",
+							"tests[\"boatLength\"] = (boatLength == \"45\");",
+							"",
+							"// Store ID for later",
+							"var boatID = jsonData.id;",
+							"pm.environment.set(\"boat1_id\", boatID);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Dagwood\", \"type\": \"Viking Ship\", \"length\": 45}"
+				},
+				"url": "{{site_url}}/boat"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 1b. View Created Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "84ad871b-647e-428c-9817-ac7c309b1033",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Test 1b return status\"] = (pm.response.code == 200)",
+							"",
+							"var boatName = jsonData.name;",
+							"tests[\"boatName\"] = (boatName == \"Dagwood\");",
+							"",
+							"var boatType = jsonData.type;",
+							"tests[\"boatType\"] = (boatType == \"Viking Ship\");",
+							"",
+							"var boatLength = jsonData.length;",
+							"tests[\"boatLength\"] = (boatLength == \"45\");",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/boat/{{boat1_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 2a. Create Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96bdca6f-3c64-4b03-b076-9575d87596b5",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log(jsonData);",
+							"",
+							"tests[\"Test 2a return status\"] = (pm.response.code == 200)",
+							"",
+							"var current_boat = jsonData.current_boat;",
+							"tests[\"current_boat is null\"] = (current_boat === null);",
+							"",
+							"var arrival_date = jsonData.arrival_date;",
+							"tests[\"arrival_date is null\"] = (arrival_date === null);",
+							"",
+							"// Store ID, number for later",
+							"var slipID = jsonData.id;",
+							"var slipNumber = jsonData.number",
+							"pm.environment.set(\"slip1_id\", slipID);",
+							"pm.environment.set(\"slip1_number\", slipNumber);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": "{{site_url}}/slip"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 2b. View Created Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "adafb22f-1e6b-4f42-a4cb-ed08a63d9b3e",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Test 2b return status\"] = (pm.response.code == 200)",
+							"",
+							"var current_boat = jsonData.current_boat;",
+							"tests[\"current_boat is null\"] = (current_boat === null);",
+							"",
+							"var arrival_date = jsonData.arrival_date;",
+							"tests[\"arrival_date is null\"] = (arrival_date === null);",
+							"",
+							"var number = pm.environment.get(\"slip1_number\");",
+							"tests[\"slipNumber\"] = (jsonData.number == number)"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/{{slip1_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 1c. Create Boat 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9e3f6256-7ab9-4e80-a639-9a0e925ac930",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log(jsonData);",
+							"",
+							"tests[\"Test 1c return status\"] = (pm.response.code == 200)",
+							"",
+							"var boatName = jsonData.name;",
+							"tests[\"boatName\"] = (boatName == \"Dagwood 2\");",
+							"",
+							"var boatType = jsonData.type;",
+							"tests[\"boatType\"] = (boatType == \"Sailboat\");",
+							"",
+							"var boatLength = jsonData.length;",
+							"tests[\"boatLength\"] = (boatLength == \"21\");",
+							"",
+							"// Store ID for later",
+							"var boatID = jsonData.id;",
+							"pm.environment.set(\"boat2_id\", boatID);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Dagwood 2\", \"type\": \"Sailboat\", \"length\": 21}"
+				},
+				"url": "{{site_url}}/boat"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 1c. Create Boat 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab57c78d-734a-4443-9363-2d0e3b596fa0",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log(jsonData);",
+							"",
+							"tests[\"Test 1c return status\"] = (pm.response.code == 200)",
+							"",
+							"var boatName = jsonData.name;",
+							"tests[\"boatName\"] = (boatName == \"Dagwood 3\");",
+							"",
+							"var boatType = jsonData.type;",
+							"tests[\"boatType\"] = (boatType == \"Sailboat\");",
+							"",
+							"var boatLength = jsonData.length;",
+							"tests[\"boatLength\"] = (boatLength == \"21\");",
+							"",
+							"// Store ID for later",
+							"var boatID = jsonData.id;",
+							"pm.environment.set(\"boat3_id\", boatID);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Dagwood 3\", \"type\": \"Sailboat\", \"length\": 21}"
+				},
+				"url": "{{site_url}}/boat"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 1d. View Multiple Boats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8f7a704c-db0f-4ba8-aed7-1e25d73d98a9",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Test 1d return status\"] = (pm.response.code == 200)",
+							"",
+							"var numBoats = jsonData.length;",
+							"//console.log(\"number boats: \" + numBoats);",
+							"",
+							"tests[\"There are at least 2 boats\"] = (numBoats >= 3)",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/boat/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 2c. Create Slip 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c21de639-6744-49fe-9157-f4343a9fb761",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log(jsonData);",
+							"",
+							"tests[\"Test 2c return status\"] = (pm.response.code == 200)",
+							"",
+							"var current_boat = jsonData.current_boat;",
+							"tests[\"current_boat is null\"] = (current_boat === null);",
+							"",
+							"var arrival_date = jsonData.arrival_date;",
+							"tests[\"arrival_date is null\"] = (arrival_date === null);",
+							"",
+							"// Store ID, number for later",
+							"var slipID = jsonData.id;",
+							"var slipNumber = jsonData.number",
+							"pm.environment.set(\"slip2_id\", slipID);",
+							"pm.environment.set(\"slip2_number\", slipNumber);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": "{{site_url}}/slip"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 2c. Create Slip 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7825d1e4-7b60-46de-b9d8-51b3cc1b5086",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log(jsonData);",
+							"",
+							"tests[\"Test 2c return status\"] = (pm.response.code == 200)",
+							"",
+							"var current_boat = jsonData.current_boat;",
+							"tests[\"current_boat is null\"] = (current_boat === null);",
+							"",
+							"var arrival_date = jsonData.arrival_date;",
+							"tests[\"arrival_date is null\"] = (arrival_date === null);",
+							"",
+							"// Store ID, number for later",
+							"var slipID = jsonData.id;",
+							"var slipNumber = jsonData.number",
+							"pm.environment.set(\"slip3_id\", slipID);",
+							"pm.environment.set(\"slip3_number\", slipNumber);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": "{{site_url}}/slip"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 2d. View Multiple Slips",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8199880c-aebf-4818-b44d-3fbad04dd878",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Test 2d return status\"] = (pm.response.code == 200)",
+							"",
+							"var numSlips = jsonData.length;",
+							"tests[\"There are at least 2 slips\"] = (numSlips >= 2)",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test3a. Dock Boat 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c9aca8ec-2155-48fe-a703-4e506ddc57ab",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log(jsonData);",
+							"",
+							"tests[\"Test 3a return status\"] = (pm.response.code == 200)",
+							"",
+							"var boatStatus = Boolean(jsonData.at_sea);",
+							"tests[\"check boat at sea is false\"] = (boatStatus === Boolean(false));",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"at_sea\": \"False\"}"
+				},
+				"url": "{{site_url}}/boat/{{boat1_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 3b. Check for Docked Boat 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4563a67d-e3a7-4e41-af7b-b6a168c5bf3e",
+						"type": "text/javascript",
+						"exec": [
+							"var slips = pm.response.json();",
+							"",
+							"tests[\"Test 3b return status\"] = (pm.response.code == 200)",
+							"",
+							"var boat1_id = parseInt(pm.environment.get(\"boat1_id\"));",
+							"var found = Boolean(false);",
+							"",
+							"",
+							"for(var i = 0; i < slips.length; i++) {",
+							"    var obj = slips[i];",
+							"    var b_ID = parseInt(obj.current_boat);",
+							"    if (b_ID == boat1_id) {",
+							"        found = Boolean(true);",
+							"    }",
+							"}",
+							"",
+							"tests[\"Boat1 is docked in a slip\"] = (found === Boolean(true))",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test3c. Dock Boat 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b5203197-be0a-4c8c-8ec5-4ba423b9de79",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log(jsonData);",
+							"",
+							"tests[\"Test 3c return status\"] = (pm.response.code == 200)",
+							"",
+							"var boatStatus = Boolean(jsonData.at_sea);",
+							"tests[\"check boat at sea is false\"] = (boatStatus === Boolean(false));",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"at_sea\": \"False\"}"
+				},
+				"url": "{{site_url}}/boat/{{boat2_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 3d. Check for Docked Boat 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ff09519c-5cd5-4e91-af54-e4e5e831dca5",
+						"type": "text/javascript",
+						"exec": [
+							"var slips = pm.response.json();",
+							"",
+							"tests[\"Test 3d return status\"] = (pm.response.code == 200)",
+							"",
+							"var boat2_id = parseInt(pm.environment.get(\"boat2_id\"));",
+							"var found = Boolean(false);",
+							"",
+							"for(var i = 0; i < slips.length; i++) {",
+							"    var obj = slips[i];",
+							"    var b_ID = parseInt(obj.current_boat);",
+							"    if (b_ID == boat2_id) {",
+							"        found = Boolean(true);",
+							"        ",
+							"        // STORE THIS SLIP ID FOR LATER TEST:",
+							"        pm.environment.set(\"boat2_referencedSlip\", obj.id)",
+							"    }",
+							"}",
+							"",
+							"tests[\"Boat2 is docked in a slip\"] = (found === Boolean(true))",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 4a. Delete Boat 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a62a6ba7-8f0b-4094-b806-b941a0bf01cb",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Test 4a return status\"] = (pm.response.code == 200)"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/boat/{{boat1_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 4b. Check for Boat 1 in Boat List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "71b3d3ae-db83-4ecb-a22a-2358aa3b8bcb",
+						"type": "text/javascript",
+						"exec": [
+							"var boats = pm.response.json();",
+							"",
+							"tests[\"Test 4b return status\"] = (pm.response.code == 200)",
+							"",
+							"var boat1_id = parseInt(pm.environment.get(\"boat1_id\"));",
+							"var found = Boolean(false);",
+							"",
+							"for(var i = 0; i < boats.length; i++) {",
+							"    var obj = boats[i];",
+							"    var b_ID = parseInt(obj.id);",
+							"    if (b_ID == boat1_id) {",
+							"        found = Boolean(true);",
+							"    }",
+							"}",
+							"",
+							"tests[\"Boat1 should not exist in boat list\"] = (found === Boolean(false))",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/boat/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 4c. Check for Boat 1 in Slip List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "117c6415-dc2f-4f81-b3ac-438f002fbc42",
+						"type": "text/javascript",
+						"exec": [
+							"var slips = pm.response.json();",
+							"",
+							"tests[\"Test 4c return status\"] = (pm.response.code == 200)",
+							"",
+							"var boat1_id = parseInt(pm.environment.get(\"boat1_id\"));",
+							"var found = Boolean(false);",
+							"",
+							"for(var i = 0; i < slips.length; i++) {",
+							"    var obj = slips[i];",
+							"    var b_ID = parseInt(obj.current_boat);",
+							"    if (b_ID == boat1_id) {",
+							"        found = Boolean(true);",
+							"    }",
+							"}",
+							"",
+							"tests[\"Boat1 should not exist in slip list\"] = (found === Boolean(false))",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 5a. Delete Boat 2 Referenced SLIP",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0286b704-b929-4bb1-866b-111c3e4aab13",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Test 5a return status\"] = (pm.response.code == 200)",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/{{boat2_referencedSlip}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 5c. Check Boat 2 at_sea Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2586769b-b7cc-4af5-a24d-6b63bf8a64ab",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Test 5b return status\"] = (pm.response.code == 200)",
+							"",
+							"",
+							"var boatStatus = Boolean(jsonData.at_sea);",
+							"tests[\"Now boat 2 at_sea status should be true\"] = (boatStatus === Boolean(true));",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/boat/{{boat2_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 5d. Check for Referenced Slip in Slip List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1c063553-6ae3-42fc-842f-1d6fbd567d8c",
+						"type": "text/javascript",
+						"exec": [
+							"var slips = pm.response.json();",
+							"",
+							"tests[\"Test 5d return status\"] = (pm.response.code == 200)",
+							"",
+							"var slip_id = parseInt(pm.environment.get(\"boat2_referencedSlip\"));",
+							"var found = Boolean(false);",
+							"",
+							"for(var i = 0; i < slips.length; i++) {",
+							"    var obj = slips[i];",
+							"    var s_ID = parseInt(obj.id);",
+							"    if (s_ID == slip_id) {",
+							"        found = Boolean(true);",
+							"    }",
+							"}",
+							"",
+							"tests[\"Referenced slip should not exist in slip list\"] = (found === Boolean(false))",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 6a. Cleanup - Boat 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a8a50502-74a7-4497-a44d-e9d9cc6fccf7",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Test 6a return status\"] = (pm.response.code == 200)"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/boat/{{boat2_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 6b. Cleanup - Boat 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb988c81-7dce-4051-8a43-e4019481d4e5",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Test 6b return status\"] = (pm.response.code == 200)"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/boat/{{boat3_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 6c. Cleanup - Slip 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "60f352c0-febf-407d-a771-32d935a63b33",
+						"type": "text/javascript",
+						"exec": [
+							"// need to add 404 status possibility because of unknown referenced slip from test 5a",
+							"tests[\"Test 6c return status\"] = (pm.response.code == 200 || pm.response.code == 404)"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/{{slip1_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 6d. Cleanup - Slip 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6d68d338-1946-4106-9e51-de217cbb1d88",
+						"type": "text/javascript",
+						"exec": [
+							"// need to add 404 status possibility because of unknown referenced slip from test 5a",
+							"tests[\"Test 6d return status\"] = (pm.response.code == 200 || pm.response.code == 404)"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/{{slip2_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Test 6e. Cleanup - Slip 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "90e06703-0fc3-4578-a9c5-998424f849b5",
+						"type": "text/javascript",
+						"exec": [
+							"// need to add 404 status possibility because of unknown referenced slip from test 5a",
+							"tests[\"Test 6e return status\"] = (pm.response.code == 200 || pm.response.code == 404)"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": "{{site_url}}/slip/{{slip3_id}}"
+			},
+			"response": []
+		}
+	]
+}
